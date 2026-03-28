@@ -44,7 +44,8 @@
           "type": "switch",
           "name": "wifi",
           "label": "Wi-Fi",
-          "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then nmcli radio wifi on; else nmcli radio wifi off; fi'",
+          "cmd_on": "nmcli radio wifi on",
+          "cmd_off": "nmcli radio wifi off",
           "read_cmd": "nmcli radio wifi | grep -q enabled && echo 1 || echo 0"
         }
       ]

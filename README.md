@@ -128,21 +128,36 @@ Fires a command on click. No `$VAL`.
 
 ### Switch
 
-Toggle with `$VAL` as `"1"` (on) or `"0"` (off).
+Stateful toggle. Supports three command modes:
 
 ```json
+// Separate on/off commands (cleanest)
 { "type": "switch", "name": "wifi", "label": "Wi-Fi",
-  "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then nmcli radio wifi on; else nmcli radio wifi off; fi'",
+  "cmd_on": "nmcli radio wifi on",
+  "cmd_off": "nmcli radio wifi off",
   "read_cmd": "nmcli radio wifi | grep -q enabled && echo 1 || echo 0" }
+
+// Single toggle command (for self-toggling tools)
+{ "type": "switch", "name": "mute", "label": "Mute",
+  "cmd": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+  "read_cmd": "wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q MUTED && echo 1 || echo 0" }
+
+// Single command with $VAL branching
+{ "type": "switch", "name": "dnd", "label": "Do Not Disturb",
+  "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then makoctl mode -a dnd; else makoctl mode -r dnd; fi'" }
 ```
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | `name` | string | `"widget"` | Widget name for CSS |
 | `label` | string | null | Label text (left-aligned) |
-| `cmd` | string | `""` | Command — `$VAL` is `"1"` or `"0"` |
+| `cmd` | string | `""` | Fallback command — `$VAL` is `"1"` or `"0"` |
+| `cmd_on` | string | null | Command to run when toggled ON (overrides `cmd`) |
+| `cmd_off` | string | null | Command to run when toggled OFF (overrides `cmd`) |
 | `read_cmd` | string | null | Command to read state (`1`/`true`/`yes`/`on` = active) |
 | `value` | bool | false | Fallback initial state |
+
+**Switch vs Button**: Button is fire-and-forget with no state. Switch tracks visual on/off state, can read initial state via `read_cmd`, and runs distinct commands per state.
 
 ### Box
 
@@ -265,7 +280,8 @@ sliders_popup < examples/themes/minimal.json
           anchor = "top right";
           children = [
             { type = "switch"; name = "wifi"; label = "Wi-Fi";
-              cmd = "sh -c 'if [ \"$VAL\" = 1 ]; then nmcli radio wifi on; else nmcli radio wifi off; fi'";
+              cmd_on = "nmcli radio wifi on";
+              cmd_off = "nmcli radio wifi off";
               read_cmd = "nmcli radio wifi | grep -q enabled && echo 1 || echo 0"; }
             { type = "button"; name = "lock"; label = "Lock";
               cmd = "swaylock"; }
