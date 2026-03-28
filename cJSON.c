@@ -134,6 +134,7 @@ static int parse_array(cJSON *item, parse_buffer *buf) {
     item->child = child;
     skip_whitespace(buf);
     if (!parse_value(child, buf)) return 0;
+    skip_whitespace(buf);
 
     while (can_access(buf, 0) && buffer_at(buf, 0) == ',') {
         buf->offset++;
@@ -144,9 +145,9 @@ static int parse_array(cJSON *item, parse_buffer *buf) {
         new_item->prev = child;
         child = new_item;
         if (!parse_value(child, buf)) return 0;
+        skip_whitespace(buf);
     }
 
-    skip_whitespace(buf);
     if (!can_access(buf, 0) || buffer_at(buf, 0) != ']') return 0;
     buf->offset++;
     return 1;
@@ -172,6 +173,7 @@ static int parse_object(cJSON *item, parse_buffer *buf) {
     buf->offset++;
     skip_whitespace(buf);
     if (!parse_value(child, buf)) return 0;
+    skip_whitespace(buf);
 
     while (can_access(buf, 0) && buffer_at(buf, 0) == ',') {
         buf->offset++;
@@ -189,6 +191,7 @@ static int parse_object(cJSON *item, parse_buffer *buf) {
         buf->offset++;
         skip_whitespace(buf);
         if (!parse_value(child, buf)) return 0;
+        skip_whitespace(buf);
     }
 
     skip_whitespace(buf);
