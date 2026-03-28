@@ -76,6 +76,8 @@ struct SliderConfig {
     value_pos: String,
     #[serde(default)]
     digits: Option<i32>,
+    #[serde(default)]
+    length: Option<i32>,
 }
 
 fn default_width() -> i32 { 300 }
@@ -289,9 +291,16 @@ fn main() {
         let scale = gtk::Scale::with_range(slider_orient, sc.min, sc.max, sc.step);
         scale.set_value(initial);
         scale.set_draw_value(sc.show_value);
-        scale.set_hexpand(true);
         if slider_orient == gtk::Orientation::Vertical {
+            let len = sc.length.unwrap_or(200);
+            scale.set_size_request(-1, len);
             scale.set_vexpand(true);
+        } else {
+            let len = sc.length.unwrap_or(-1);
+            if len > 0 {
+                scale.set_size_request(len, -1);
+            }
+            scale.set_hexpand(true);
         }
 
         // Value position
