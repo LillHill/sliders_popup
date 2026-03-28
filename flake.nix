@@ -17,21 +17,28 @@
         {
           default = self.packages.${system}.sliders_popup;
 
-          sliders_popup = pkgs.stdenv.mkDerivation {
+          sliders_popup = pkgs.rustPlatform.buildRustPackage {
             pname = "sliders_popup";
             version = "0.1.0";
             src = self;
 
+            useFetchCargoVendor = true;
+            cargoHash = "";
+
             nativeBuildInputs = with pkgs; [
               pkg-config
+              wrapGAppsHook
             ];
 
             buildInputs = with pkgs; [
               gtk3
               gtk-layer-shell
+              glib
+              pango
+              gdk-pixbuf
+              atk
+              cairo
             ];
-
-            makeFlags = [ "PREFIX=$(out)" ];
 
             meta = with pkgs.lib; {
               description = "Lightweight Wayland slider popup with JSON stdin config";
@@ -47,7 +54,20 @@
         let pkgs = pkgsFor system; in
         {
           default = pkgs.mkShell {
-            inputsFrom = [ self.packages.${system}.sliders_popup ];
+            nativeBuildInputs = with pkgs; [
+              pkg-config
+              cargo
+              rustc
+            ];
+            buildInputs = with pkgs; [
+              gtk3
+              gtk-layer-shell
+              glib
+              pango
+              gdk-pixbuf
+              atk
+              cairo
+            ];
           };
         }
       );
