@@ -2,6 +2,7 @@ use gtk::prelude::*;
 use gtk::CssProvider;
 use gtk_layer_shell::LayerShell;
 use serde::Deserialize;
+use serde_json::Value;
 use std::io::Read;
 use std::process::Command;
 
@@ -33,12 +34,10 @@ struct Config {
     exclusive_zone: i32,
     #[serde(default)]
     spacing: Option<i32>,
-    // New tree-based layout
     #[serde(default)]
-    children: Vec<Widget>,
-    // Backward compat: flat slider list
+    children: Vec<Value>,
     #[serde(default)]
-    sliders: Vec<Widget>,
+    sliders: Vec<Value>,
 }
 
 #[derive(Deserialize, Debug, Default)]
@@ -60,99 +59,71 @@ enum Margin {
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(tag = "type")]
-#[serde(rename_all = "lowercase")]
-enum Widget {
-    Box {
-        #[serde(default = "default_horizontal")]
-        orientation: String,
-        #[serde(default)]
-        name: Option<String>,
-        #[serde(default)]
-        spacing: Option<i32>,
-        #[serde(default)]
-        homogeneous: bool,
-        #[serde(default)]
-        children: Vec<Widget>,
-    },
-    Slider {
-        #[serde(default = "default_widget_name")]
-        name: String,
-        #[serde(default)]
-        label: Option<String>,
-        #[serde(default)]
-        cmd: String,
-        #[serde(default)]
-        read_cmd: Option<String>,
-        #[serde(default)]
-        min: f64,
-        #[serde(default = "default_max")]
-        max: f64,
-        #[serde(default = "default_step")]
-        step: f64,
-        #[serde(default)]
-        value: Option<f64>,
-        #[serde(default)]
-        orientation: Option<String>,
-        #[serde(default = "default_true")]
-        show_value: bool,
-        #[serde(default = "default_value_pos")]
-        value_pos: String,
-        #[serde(default)]
-        digits: Option<i32>,
-        #[serde(default)]
-        length: Option<i32>,
-    },
-    Button {
-        #[serde(default = "default_widget_name")]
-        name: String,
-        #[serde(default)]
-        label: Option<String>,
-        #[serde(default)]
-        cmd: String,
-    },
-    Switch {
-        #[serde(default = "default_widget_name")]
-        name: String,
-        #[serde(default)]
-        label: Option<String>,
-        #[serde(default)]
-        cmd: String,
-        #[serde(default)]
-        read_cmd: Option<String>,
-        #[serde(default)]
-        value: bool,
-    },
-    // Untagged fallback: if no "type" field, treat as slider (backward compat)
-    #[serde(untagged)]
-    SliderCompat {
-        #[serde(default = "default_widget_name")]
-        name: String,
-        #[serde(default)]
-        label: Option<String>,
-        #[serde(default)]
-        cmd: String,
-        #[serde(default)]
-        read_cmd: Option<String>,
-        #[serde(default)]
-        min: f64,
-        #[serde(default = "default_max")]
-        max: f64,
-        #[serde(default = "default_step")]
-        step: f64,
-        #[serde(default)]
-        value: Option<f64>,
-        #[serde(default)]
-        orientation: Option<String>,
-        #[serde(default = "default_true")]
-        show_value: bool,
-        #[serde(default = "default_value_pos")]
-        value_pos: String,
-        #[serde(default)]
-        digits: Option<i32>,
-        #[serde(default)]
-        length: Option<i32>,
-    },
+struct BoxWidget {
+    #[serde(default = "default_horizontal")]
+    orientation: String,
+    #[serde(default)]
+    name: Option<String>,
+    #[serde(default)]
+    spacing: Option<i32>,
+    #[serde(default)]
+    homogeneous: bool,
+    #[serde(default)]
+    children: Vec<Value>,
+}
+
+#[derive(Deserialize, Debug)]
+struct SliderWidget {
+    #[serde(default = "default_widget_name")]
+    name: String,
+    #[serde(default)]
+    label: Option<String>,
+    #[serde(default)]
+    cmd: String,
+    #[serde(default)]
+    read_cmd: Option<String>,
+    #[serde(default)]
+    min: f64,
+    #[serde(default = "default_max")]
+    max: f64,
+    #[serde(default = "default_step")]
+    step: f64,
+    #[serde(default)]
+    value: Option<f64>,
+    #[serde(default)]
+    orientation: Option<String>,
+    #[serde(default = "default_true")]
+    show_value: bool,
+    #[serde(default = "default_value_pos")]
+    value_pos: String,
+    #[serde(default)]
+    digits: Option<i32>,
+    #[serde(default)]
+    length: Option<i32>,
+}
+
+#[derive(Deserialize, Debug)]
+struct ButtonWidget {
+    #[serde(default = "default_widget_name")]
+    name: String,
+    #[serde(default)]
+    label: Option<String>,
+    #[serde(default)]
+    cmd: String,
+}
+
+#[derive(Deserialize, Debug)]
+struct SwitchWidget {
+    #[serde(default = "default_widget_name")]
+    name: String,
+    #[serde(default)]
+    label: Option<String>,
+    #[serde(default)]
+    cmd: String,
+    #[serde(default)]
+    read_cmd: Option<String>,
+    #[serde(default)]
+    value: bool,
 }
 
 fn default_width() -> i32 { 300 }
@@ -219,109 +190,51 @@ fn read_value(cmd: &str) -> Option<String> {
 
 // ── Widget builder ──
 
-fn build_widget(widget: &Widget, parent: &gtk::Box) {
-    match widget {
-        Widget::Box { orientation, name, spacing, homogeneous, children } => {
-            let bx = gtk::Box::new(parse_orient(orientation), spacing.unwrap_or(4));
-            bx.set_homogeneous(*homogeneous);
-            if let Some(n) = name {
-                bx.set_widget_name(n);
-            }
+fn build_widget(val: &Value, parent: &gtk::Box) {
+    let wtype = val.get("type").and_then(|v| v.as_str()).unwrap_or("slider");
+
+    match wtype {
+        "box" => {
+            let w: BoxWidget = match serde_json::from_value(val.clone()) {
+                Ok(w) => w,
+                Err(e) => { eprintln!("sliders_popup: bad box widget: {e}"); return; }
+            };
+            let bx = gtk::Box::new(parse_orient(&w.orientation), w.spacing.unwrap_or(4));
+            bx.set_homogeneous(w.homogeneous);
+            if let Some(n) = &w.name { bx.set_widget_name(n); }
             bx.style_context().add_class("container");
-            for child in children {
+            for child in &w.children {
                 build_widget(child, &bx);
             }
             parent.pack_start(&bx, true, true, 0);
         }
 
-        Widget::Slider { name, label, cmd, read_cmd, min, max, step, value,
-                         orientation, show_value, value_pos, digits, length }
-        | Widget::SliderCompat { name, label, cmd, read_cmd, min, max, step, value,
-                                 orientation, show_value, value_pos, digits, length } => {
-            let row = gtk::Box::new(gtk::Orientation::Vertical, 2);
-            row.set_widget_name(name);
-            row.style_context().add_class("slider-row");
-
-            if let Some(ref text) = label {
-                let lbl = gtk::Label::new(Some(text));
-                lbl.style_context().add_class("slider-label");
-                row.pack_start(&lbl, false, false, 0);
-            }
-
-            let slider_orient = match orientation.as_deref() {
-                Some("vertical") => gtk::Orientation::Vertical,
-                _ => gtk::Orientation::Horizontal,
+        "button" => {
+            let w: ButtonWidget = match serde_json::from_value(val.clone()) {
+                Ok(w) => w,
+                Err(e) => { eprintln!("sliders_popup: bad button widget: {e}"); return; }
             };
-
-            // Resolve initial value: read_cmd > value > min
-            let initial = read_cmd.as_deref()
-                .and_then(|rc| read_value(rc))
-                .and_then(|s| s.parse::<f64>().ok())
-                .or(*value)
-                .unwrap_or(*min);
-
-            let scale = gtk::Scale::with_range(slider_orient, *min, *max, *step);
-            scale.set_value(initial);
-            scale.set_draw_value(*show_value);
-
-            if slider_orient == gtk::Orientation::Vertical {
-                let len = length.unwrap_or(200);
-                scale.set_size_request(-1, len);
-                scale.set_vexpand(true);
-            } else {
-                let len = length.unwrap_or(-1);
-                if len > 0 { scale.set_size_request(len, -1); }
-                scale.set_hexpand(true);
-            }
-
-            scale.set_value_pos(match value_pos.as_str() {
-                "bottom" => gtk::PositionType::Bottom,
-                "left" => gtk::PositionType::Left,
-                "right" => gtk::PositionType::Right,
-                _ => gtk::PositionType::Top,
-            });
-
-            let d = digits.unwrap_or_else(|| {
-                if *step == step.floor() && *step >= 1.0 { 0 } else { 2 }
-            });
-            scale.set_digits(d);
-            scale.set_widget_name(name);
-            scale.style_context().add_class("slider");
-
-            let cmd = cmd.clone();
-            let int_mode = *step >= 1.0 && *step == step.floor();
-            scale.connect_value_changed(move |s| {
-                let val = s.value();
-                let val_str = if int_mode {
-                    format!("{}", val as i64)
-                } else {
-                    format!("{:.2}", val)
-                };
-                if !cmd.is_empty() { run_cmd(&cmd, &val_str); }
-            });
-
-            row.pack_start(&scale, true, true, 0);
-            parent.pack_start(&row, true, true, 0);
-        }
-
-        Widget::Button { name, label, cmd } => {
-            let text = label.as_deref().unwrap_or(name);
+            let text = w.label.as_deref().unwrap_or(&w.name);
             let btn = gtk::Button::with_label(text);
-            btn.set_widget_name(name);
+            btn.set_widget_name(&w.name);
             btn.style_context().add_class("popup-button");
-            let cmd = cmd.clone();
+            let cmd = w.cmd;
             btn.connect_clicked(move |_| {
                 if !cmd.is_empty() { run_cmd(&cmd, ""); }
             });
             parent.pack_start(&btn, false, false, 0);
         }
 
-        Widget::Switch { name, label, cmd, read_cmd, value } => {
+        "switch" => {
+            let w: SwitchWidget = match serde_json::from_value(val.clone()) {
+                Ok(w) => w,
+                Err(e) => { eprintln!("sliders_popup: bad switch widget: {e}"); return; }
+            };
             let row = gtk::Box::new(gtk::Orientation::Horizontal, 8);
-            row.set_widget_name(name);
+            row.set_widget_name(&w.name);
             row.style_context().add_class("switch-row");
 
-            if let Some(ref text) = label {
+            if let Some(ref text) = w.label {
                 let lbl = gtk::Label::new(Some(text));
                 lbl.style_context().add_class("switch-label");
                 lbl.set_hexpand(true);
@@ -329,18 +242,17 @@ fn build_widget(widget: &Widget, parent: &gtk::Box) {
                 row.pack_start(&lbl, true, true, 0);
             }
 
-            // Resolve initial state: read_cmd > value
-            let initial = read_cmd.as_deref()
+            let initial = w.read_cmd.as_deref()
                 .and_then(|rc| read_value(rc))
-                .map(|s| matches!(s.trim(), "1" | "true" | "yes" | "on"))
-                .unwrap_or(*value);
+                .map(|s| matches!(s.as_str(), "1" | "true" | "yes" | "on"))
+                .unwrap_or(w.value);
 
             let switch = gtk::Switch::new();
             switch.set_active(initial);
-            switch.set_widget_name(name);
+            switch.set_widget_name(&w.name);
             switch.style_context().add_class("popup-switch");
 
-            let cmd = cmd.clone();
+            let cmd = w.cmd;
             switch.connect_state_set(move |_, state| {
                 let val_str = if state { "1" } else { "0" };
                 if !cmd.is_empty() { run_cmd(&cmd, val_str); }
@@ -350,11 +262,81 @@ fn build_widget(widget: &Widget, parent: &gtk::Box) {
             row.pack_end(&switch, false, false, 0);
             parent.pack_start(&row, false, false, 0);
         }
+
+        // "slider" or anything else (including no type field for backward compat)
+        _ => {
+            let w: SliderWidget = match serde_json::from_value(val.clone()) {
+                Ok(w) => w,
+                Err(e) => { eprintln!("sliders_popup: bad slider widget: {e}"); return; }
+            };
+            let row = gtk::Box::new(gtk::Orientation::Vertical, 2);
+            row.set_widget_name(&w.name);
+            row.style_context().add_class("slider-row");
+
+            if let Some(ref text) = w.label {
+                let lbl = gtk::Label::new(Some(text));
+                lbl.style_context().add_class("slider-label");
+                row.pack_start(&lbl, false, false, 0);
+            }
+
+            let slider_orient = match w.orientation.as_deref() {
+                Some("vertical") => gtk::Orientation::Vertical,
+                _ => gtk::Orientation::Horizontal,
+            };
+
+            let initial = w.read_cmd.as_deref()
+                .and_then(|rc| read_value(rc))
+                .and_then(|s| s.parse::<f64>().ok())
+                .or(w.value)
+                .unwrap_or(w.min);
+
+            let scale = gtk::Scale::with_range(slider_orient, w.min, w.max, w.step);
+            scale.set_value(initial);
+            scale.set_draw_value(w.show_value);
+
+            if slider_orient == gtk::Orientation::Vertical {
+                let len = w.length.unwrap_or(200);
+                scale.set_size_request(-1, len);
+                scale.set_vexpand(true);
+            } else {
+                let len = w.length.unwrap_or(-1);
+                if len > 0 { scale.set_size_request(len, -1); }
+                scale.set_hexpand(true);
+            }
+
+            scale.set_value_pos(match w.value_pos.as_str() {
+                "bottom" => gtk::PositionType::Bottom,
+                "left" => gtk::PositionType::Left,
+                "right" => gtk::PositionType::Right,
+                _ => gtk::PositionType::Top,
+            });
+
+            let d = w.digits.unwrap_or_else(|| {
+                if w.step == w.step.floor() && w.step >= 1.0 { 0 } else { 2 }
+            });
+            scale.set_digits(d);
+            scale.set_widget_name(&w.name);
+            scale.style_context().add_class("slider");
+
+            let cmd = w.cmd;
+            let int_mode = w.step >= 1.0 && w.step == w.step.floor();
+            scale.connect_value_changed(move |s| {
+                let v = s.value();
+                let val_str = if int_mode {
+                    format!("{}", v as i64)
+                } else {
+                    format!("{:.2}", v)
+                };
+                if !cmd.is_empty() { run_cmd(&cmd, &val_str); }
+            });
+
+            row.pack_start(&scale, true, true, 0);
+            parent.pack_start(&row, true, true, 0);
+        }
     }
 }
 
 fn main() {
-    // ── Read stdin ──
     let mut input = String::new();
     let args: Vec<String> = std::env::args().collect();
     let css_file_arg = args.windows(2)
@@ -372,7 +354,6 @@ fn main() {
         std::process::exit(1);
     }
 
-    // ── Parse JSON with detailed errors ──
     let config: Config = match serde_json::from_str(&input) {
         Ok(c) => c,
         Err(e) => {
@@ -391,7 +372,6 @@ fn main() {
         }
     };
 
-    // ── GTK init ──
     gtk::init().expect("sliders_popup: failed to init GTK");
 
     // ── CSS ──
@@ -486,7 +466,6 @@ fn main() {
     win.add(&container);
 
     // ── Build widgets ──
-    // Prefer "children" if present, fall back to "sliders" for compat
     let widgets = if !config.children.is_empty() {
         &config.children
     } else {

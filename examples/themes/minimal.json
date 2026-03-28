@@ -1,0 +1,61 @@
+{
+  "width": 350,
+  "anchor": "center",
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "themes/minimal.css",
+  "orientation": "vertical",
+  "spacing": 6,
+  "children": [
+    {
+      "type": "slider",
+      "name": "volume",
+      "label": "Volume",
+      "cmd": "echo volume=$VAL",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 65
+    },
+    {
+      "type": "slider",
+      "name": "brightness",
+      "label": "Brightness",
+      "cmd": "echo brightness=$VAL",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 80
+    },
+    {
+      "type": "box",
+      "orientation": "horizontal",
+      "spacing": 12,
+      "children": [
+        {
+          "type": "switch",
+          "name": "toggle_a",
+          "label": "Wi-Fi",
+          "cmd": "echo wifi=$VAL",
+          "value": true
+        },
+        {
+          "type": "switch",
+          "name": "toggle_b",
+          "label": "Bluetooth",
+          "cmd": "echo bt=$VAL",
+          "value": false
+        }
+      ]
+    },
+    {
+      "type": "box",
+      "orientation": "horizontal",
+      "spacing": 8,
+      "children": [
+        { "type": "button", "name": "btn_a", "label": "Action A", "cmd": "echo action_a" },
+        { "type": "button", "name": "btn_b", "label": "Action B", "cmd": "echo action_b" }
+      ]
+    }
+  ]
+}
