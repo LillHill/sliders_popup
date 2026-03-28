@@ -1,0 +1,29 @@
+{
+  "width": 350,
+  "anchor": "bottom",
+  "margin": { "bottom": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "style.css",
+  "orientation": "vertical",
+  "sliders": [
+    {
+      "name": "master",
+      "label": "Master",
+      "cmd": "pactl set-sink-volume @DEFAULT_SINK@ ${VAL}%",
+      "min": 0,
+      "max": 150,
+      "step": 1,
+      "value": 75
+    },
+    {
+      "name": "mic",
+      "label": "Microphone",
+      "cmd": "pactl set-source-volume @DEFAULT_SOURCE@ ${VAL}%",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 80
+    }
+  ]
+}

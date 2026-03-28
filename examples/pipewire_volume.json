@@ -1,0 +1,29 @@
+{
+  "width": 300,
+  "anchor": "top right",
+  "margin": { "top": 10, "right": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "style.css",
+  "orientation": "vertical",
+  "sliders": [
+    {
+      "name": "volume",
+      "label": "Speaker",
+      "cmd": "wpctl set-volume @DEFAULT_AUDIO_SINK@ $(echo \"scale=2; ${VAL}/100\" | bc)",
+      "min": 0,
+      "max": 150,
+      "step": 1,
+      "value": 50
+    },
+    {
+      "name": "mic",
+      "label": "Microphone",
+      "cmd": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ $(echo \"scale=2; ${VAL}/100\" | bc)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 80
+    }
+  ]
+}

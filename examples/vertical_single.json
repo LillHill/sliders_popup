@@ -1,0 +1,22 @@
+{
+  "width": 60,
+  "anchor": "right",
+  "margin": { "right": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "style.css",
+  "orientation": "horizontal",
+  "sliders": [
+    {
+      "name": "volume",
+      "orientation": "vertical",
+      "length": 250,
+      "cmd": "wpctl set-volume @DEFAULT_AUDIO_SINK@ ${VAL}%",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 50,
+      "show_value": false
+    }
+  ]
+}

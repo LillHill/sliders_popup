@@ -3,7 +3,6 @@
   "anchor": "right",
   "margin": { "top": 10, "right": 10 },
   "layer": "overlay",
-  "namespace": "sliders_popup",
   "close_on_focus_loss": true,
   "css": "style.css",
   "orientation": "vertical",

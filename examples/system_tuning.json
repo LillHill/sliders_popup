@@ -1,0 +1,29 @@
+{
+  "width": 350,
+  "anchor": "top",
+  "margin": { "top": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "style.css",
+  "orientation": "vertical",
+  "sliders": [
+    {
+      "name": "speed",
+      "label": "Fan Speed %",
+      "cmd": "echo ${VAL} | tee /sys/class/hwmon/hwmon*/pwm1",
+      "min": 0,
+      "max": 255,
+      "step": 5,
+      "value": 128
+    },
+    {
+      "name": "cpu_max_freq",
+      "label": "CPU Max Freq (MHz)",
+      "cmd": "cpupower frequency-set -u ${VAL}MHz",
+      "min": 800,
+      "max": 5000,
+      "step": 100,
+      "value": 3500
+    }
+  ]
+}

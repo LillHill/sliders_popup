@@ -1,0 +1,47 @@
+{
+  "width": 250,
+  "anchor": "right",
+  "margin": { "right": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "style.css",
+  "orientation": "horizontal",
+  "sliders": [
+    {
+      "name": "vol",
+      "label": "Vol",
+      "orientation": "vertical",
+      "length": 300,
+      "cmd": "wpctl set-volume @DEFAULT_AUDIO_SINK@ ${VAL}%",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 50,
+      "value_pos": "bottom"
+    },
+    {
+      "name": "mic",
+      "label": "Mic",
+      "orientation": "vertical",
+      "length": 300,
+      "cmd": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ ${VAL}%",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 80,
+      "value_pos": "bottom"
+    },
+    {
+      "name": "bri",
+      "label": "Bri",
+      "orientation": "vertical",
+      "length": 300,
+      "cmd": "brightnessctl set ${VAL}%",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "value": 75,
+      "value_pos": "bottom"
+    }
+  ]
+}
