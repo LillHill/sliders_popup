@@ -121,6 +121,10 @@ struct SwitchWidget {
     #[serde(default)]
     cmd: String,
     #[serde(default)]
+    cmd_on: Option<String>,
+    #[serde(default)]
+    cmd_off: Option<String>,
+    #[serde(default)]
     read_cmd: Option<String>,
     #[serde(default)]
     value: bool,
@@ -253,9 +257,17 @@ fn build_widget(val: &Value, parent: &gtk::Box) {
             switch.style_context().add_class("popup-switch");
 
             let cmd = w.cmd;
+            let cmd_on = w.cmd_on;
+            let cmd_off = w.cmd_off;
             switch.connect_state_set(move |_, state| {
                 let val_str = if state { "1" } else { "0" };
-                if !cmd.is_empty() { run_cmd(&cmd, val_str); }
+                if state {
+                    if let Some(ref c) = cmd_on { run_cmd(c, val_str); }
+                    else if !cmd.is_empty() { run_cmd(&cmd, val_str); }
+                } else {
+                    if let Some(ref c) = cmd_off { run_cmd(c, val_str); }
+                    else if !cmd.is_empty() { run_cmd(&cmd, val_str); }
+                }
                 gtk::glib::Propagation::Proceed
             });
 

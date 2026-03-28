@@ -31,7 +31,8 @@
       "type": "switch",
       "name": "nightlight",
       "label": "Night Light (3500K)",
-      "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 3500; else busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 6500; fi'"
+      "cmd_on": "busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 3500",
+      "cmd_off": "busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 6500"
     },
     {
       "type": "button",

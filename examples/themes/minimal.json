@@ -36,7 +36,8 @@
           "type": "switch",
           "name": "toggle_a",
           "label": "Wi-Fi",
-          "cmd": "echo wifi=$VAL",
+          "cmd_on": "echo wifi=on",
+          "cmd_off": "echo wifi=off",
           "value": true
         },
         {

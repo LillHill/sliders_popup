@@ -12,27 +12,31 @@
       "type": "switch",
       "name": "wifi",
       "label": "Wi-Fi",
-      "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then nmcli radio wifi on; else nmcli radio wifi off; fi'",
+      "cmd_on": "nmcli radio wifi on",
+      "cmd_off": "nmcli radio wifi off",
       "read_cmd": "nmcli radio wifi | grep -q enabled && echo 1 || echo 0"
     },
     {
       "type": "switch",
       "name": "bluetooth",
       "label": "Bluetooth",
-      "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then bluetoothctl power on; else bluetoothctl power off; fi'",
+      "cmd_on": "bluetoothctl power on",
+      "cmd_off": "bluetoothctl power off",
       "read_cmd": "bluetoothctl show | grep -q 'Powered: yes' && echo 1 || echo 0"
     },
     {
       "type": "switch",
       "name": "dnd",
       "label": "Do Not Disturb",
-      "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then makoctl mode -a dnd; else makoctl mode -r dnd; fi'"
+      "cmd_on": "makoctl mode -a dnd",
+      "cmd_off": "makoctl mode -r dnd"
     },
     {
       "type": "switch",
       "name": "idle",
       "label": "Screen Lock",
-      "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then pidof swayidle || swayidle &; else pkill swayidle; fi'",
+      "cmd_on": "pidof swayidle || swayidle &",
+      "cmd_off": "pkill swayidle",
       "read_cmd": "pidof swayidle > /dev/null && echo 1 || echo 0"
     },
     {
