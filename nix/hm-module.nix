@@ -55,8 +55,22 @@ in
                     name = "volume";
                     label = "Volume";
                     cmd = "wpctl set-volume @DEFAULT_AUDIO_SINK@ \''${VAL}%";
-                    min = 0; max = 100; step = 1;
                     read_cmd = "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%.0f\", $2 * 100}'";
+                    min = 0; max = 100; step = 1;
+                  }
+                  {
+                    type = "switch";
+                    name = "wifi";
+                    label = "Wi-Fi";
+                    cmd_on = "nmcli radio wifi on";
+                    cmd_off = "nmcli radio wifi off";
+                    read_cmd = "nmcli radio wifi | grep -q enabled && echo 1 || echo 0";
+                  }
+                  {
+                    type = "button";
+                    name = "lock";
+                    label = "Lock";
+                    cmd = "swaylock";
                   }
                 ];
               }
