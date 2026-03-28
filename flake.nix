@@ -49,6 +49,17 @@
         }
       );
 
+      # Home Manager module
+      homeManagerModules = {
+        default = self.homeManagerModules.sliders_popup;
+        sliders_popup = import ./nix/hm-module.nix;
+      };
+
+      # Overlay for easy inclusion in nixpkgs
+      overlays.default = final: prev: {
+        sliders_popup = self.packages.${final.system}.sliders_popup;
+      };
+
       devShells = forAllSystems (system:
         let pkgs = pkgsFor system; in
         {
