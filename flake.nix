@@ -22,12 +22,11 @@
             version = "0.1.0";
             src = self;
 
-            useFetchCargoVendor = true;
-            cargoHash = "";
+            cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
             nativeBuildInputs = with pkgs; [
               pkg-config
-              wrapGAppsHook
+              wrapGAppsHook3
             ];
 
             buildInputs = with pkgs; [
