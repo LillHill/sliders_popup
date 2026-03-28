@@ -1,0 +1,39 @@
+{
+  "width": 300,
+  "anchor": "right",
+  "margin": { "top": 10, "right": 10 },
+  "layer": "overlay",
+  "namespace": "sliders_popup",
+  "close_on_focus_loss": true,
+  "css": "style.css",
+  "orientation": "vertical",
+  "sliders": [
+    {
+      "name": "volume",
+      "label": "Volume",
+      "cmd": "wpctl set-volume @DEFAULT_AUDIO_SINK@ ${VAL}%",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 50
+    },
+    {
+      "name": "brightness",
+      "label": "Brightness",
+      "cmd": "brightnessctl set ${VAL}%",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "value": 75
+    },
+    {
+      "name": "mic",
+      "label": "Microphone",
+      "cmd": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ ${VAL}%",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 80
+    }
+  ]
+}
