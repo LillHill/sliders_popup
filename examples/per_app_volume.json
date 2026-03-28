@@ -1,0 +1,46 @@
+{
+  "width": 400,
+  "anchor": "center",
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "style.css",
+  "orientation": "vertical",
+  "sliders": [
+    {
+      "name": "music",
+      "label": "Music",
+      "cmd": "pactl set-sink-input-volume $(pactl list sink-inputs short | grep -i spotify | awk '{print $1}') ${VAL}%",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 80
+    },
+    {
+      "name": "browser",
+      "label": "Browser",
+      "cmd": "pactl set-sink-input-volume $(pactl list sink-inputs short | grep -i firefox | awk '{print $1}') ${VAL}%",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 100
+    },
+    {
+      "name": "discord",
+      "label": "Discord",
+      "cmd": "pactl set-sink-input-volume $(pactl list sink-inputs short | grep -i discord | awk '{print $1}') ${VAL}%",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 70
+    },
+    {
+      "name": "game",
+      "label": "Game",
+      "cmd": "pactl set-sink-input-volume $(pactl list sink-inputs short | grep -i steam | awk '{print $1}') ${VAL}%",
+      "min": 0,
+      "max": 150,
+      "step": 1,
+      "value": 100
+    }
+  ]
+}

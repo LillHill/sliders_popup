@@ -1,0 +1,31 @@
+{
+  "width": 350,
+  "anchor": "top right",
+  "margin": { "top": 10, "right": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "style.css",
+  "orientation": "vertical",
+  "sliders": [
+    {
+      "name": "rate",
+      "label": "Speed",
+      "cmd": "playerctl -p mpv speed ${VAL}",
+      "min": 0.25,
+      "max": 4.0,
+      "step": 0.25,
+      "value": 1.0,
+      "digits": 2
+    },
+    {
+      "name": "mpv_volume",
+      "label": "Volume",
+      "cmd": "playerctl -p mpv volume ${VAL}",
+      "min": 0.0,
+      "max": 1.0,
+      "step": 0.05,
+      "value": 1.0,
+      "digits": 2
+    }
+  ]
+}

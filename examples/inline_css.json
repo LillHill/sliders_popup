@@ -1,0 +1,29 @@
+{
+  "width": 400,
+  "anchor": "bottom right",
+  "margin": { "bottom": 40, "right": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css_inline": "#sliders_popup { background: rgba(30,30,46,0.95); border-radius: 16px; padding: 12px; } .slider-label { color: #cdd6f4; font-size: 14px; font-weight: bold; } scale trough { background: #313244; border-radius: 8px; min-height: 10px; } scale highlight { background: linear-gradient(to right, #89b4fa, #b4befe); border-radius: 8px; min-height: 10px; } scale slider { background: #f5e0dc; border-radius: 50%; min-width: 18px; min-height: 18px; margin: -5px; } scale value { color: #a6adc8; font-size: 12px; }",
+  "orientation": "vertical",
+  "sliders": [
+    {
+      "name": "volume",
+      "label": "Volume",
+      "cmd": "wpctl set-volume @DEFAULT_AUDIO_SINK@ ${VAL}%",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "value": 50
+    },
+    {
+      "name": "brightness",
+      "label": "Brightness",
+      "cmd": "brightnessctl set ${VAL}%",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "value": 75
+    }
+  ]
+}
