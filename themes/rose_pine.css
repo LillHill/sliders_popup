@@ -1,0 +1,77 @@
+/* Rose Pine theme */
+
+#sliders_popup {
+    background-color: #191724;
+    border-radius: 14px;
+    padding: 12px;
+}
+
+.slider-row {
+    margin: 4px 0;
+}
+
+.slider-label, .switch-label {
+    color: #e0def4;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+scale trough {
+    background-color: #26233a;
+    border-radius: 8px;
+    min-height: 8px;
+}
+
+scale highlight {
+    background-color: #c4a7e7;
+    border-radius: 8px;
+    min-height: 8px;
+}
+
+scale slider {
+    background-color: #e0def4;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+    margin: -4px;
+}
+
+scale value {
+    color: #908caa;
+    font-size: 11px;
+}
+
+.popup-button {
+    background: #26233a;
+    color: #e0def4;
+    border: 1px solid #393552;
+    border-radius: 10px;
+    padding: 6px 16px;
+    font-size: 13px;
+}
+
+.popup-button:hover {
+    background: #393552;
+}
+
+.popup-button:active {
+    background: #524f67;
+}
+
+switch {
+    background-color: #26233a;
+    border-radius: 12px;
+    min-width: 40px;
+    min-height: 20px;
+}
+
+switch:checked {
+    background-color: #c4a7e7;
+}
+
+switch slider {
+    background-color: #e0def4;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+}

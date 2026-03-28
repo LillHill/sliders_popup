@@ -1,0 +1,52 @@
+{
+  "width": 350,
+  "anchor": "top right",
+  "margin": { "top": 10, "right": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "themes/catppuccin.css",
+  "orientation": "vertical",
+  "children": [
+    {
+      "type": "slider",
+      "name": "volume",
+      "label": "Speaker",
+      "cmd": "wpctl set-volume @DEFAULT_AUDIO_SINK@ ${VAL}%",
+      "read_cmd": "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%.0f\", $2 * 100}'",
+      "min": 0,
+      "max": 150,
+      "step": 1
+    },
+    {
+      "type": "slider",
+      "name": "mic",
+      "label": "Microphone",
+      "cmd": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ ${VAL}%",
+      "read_cmd": "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{printf \"%.0f\", $2 * 100}'",
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    {
+      "type": "box",
+      "orientation": "horizontal",
+      "spacing": 8,
+      "children": [
+        {
+          "type": "switch",
+          "name": "mute_speaker",
+          "label": "Mute Speaker",
+          "cmd": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+          "read_cmd": "wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q MUTED && echo 0 || echo 1"
+        },
+        {
+          "type": "switch",
+          "name": "mute_mic",
+          "label": "Mute Mic",
+          "cmd": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+          "read_cmd": "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -q MUTED && echo 0 || echo 1"
+        }
+      ]
+    }
+  ]
+}

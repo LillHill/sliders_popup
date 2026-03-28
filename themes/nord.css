@@ -1,0 +1,78 @@
+/* Nord theme */
+
+#sliders_popup {
+    background-color: #2e3440;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.slider-row {
+    margin: 6px 0;
+}
+
+.slider-label, .switch-label {
+    color: #eceff4;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+scale trough {
+    background-color: #3b4252;
+    border-radius: 4px;
+    min-height: 6px;
+}
+
+scale highlight {
+    background-color: #88c0d0;
+    border-radius: 4px;
+    min-height: 6px;
+}
+
+scale slider {
+    background-color: #e5e9f0;
+    border-radius: 50%;
+    min-width: 14px;
+    min-height: 14px;
+    margin: -4px;
+    border: 2px solid #88c0d0;
+}
+
+scale value {
+    color: #d8dee9;
+    font-size: 11px;
+}
+
+.popup-button {
+    background: #3b4252;
+    color: #eceff4;
+    border: 1px solid #4c566a;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 13px;
+}
+
+.popup-button:hover {
+    background: #434c5e;
+}
+
+.popup-button:active {
+    background: #4c566a;
+}
+
+switch {
+    background-color: #3b4252;
+    border-radius: 10px;
+    min-width: 40px;
+    min-height: 20px;
+}
+
+switch:checked {
+    background-color: #88c0d0;
+}
+
+switch slider {
+    background-color: #eceff4;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+}

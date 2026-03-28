@@ -1,0 +1,78 @@
+/* Gruvbox Dark theme */
+
+#sliders_popup {
+    background-color: #282828;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.slider-row {
+    margin: 5px 0;
+}
+
+.slider-label, .switch-label {
+    color: #ebdbb2;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+scale trough {
+    background-color: #3c3836;
+    border-radius: 3px;
+    min-height: 8px;
+}
+
+scale highlight {
+    background-color: #b8bb26;
+    border-radius: 3px;
+    min-height: 8px;
+}
+
+scale slider {
+    background-color: #fbf1c7;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+    margin: -4px;
+}
+
+scale value {
+    color: #a89984;
+    font-size: 11px;
+}
+
+.popup-button {
+    background: #3c3836;
+    color: #ebdbb2;
+    border: 1px solid #504945;
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.popup-button:hover {
+    background: #504945;
+}
+
+.popup-button:active {
+    background: #665c54;
+}
+
+switch {
+    background-color: #3c3836;
+    border-radius: 10px;
+    min-width: 40px;
+    min-height: 20px;
+}
+
+switch:checked {
+    background-color: #b8bb26;
+}
+
+switch slider {
+    background-color: #fbf1c7;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+}

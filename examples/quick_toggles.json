@@ -1,0 +1,51 @@
+{
+  "width": 300,
+  "anchor": "top right",
+  "margin": { "top": 10, "right": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "themes/gruvbox.css",
+  "orientation": "vertical",
+  "spacing": 6,
+  "children": [
+    {
+      "type": "switch",
+      "name": "wifi",
+      "label": "Wi-Fi",
+      "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then nmcli radio wifi on; else nmcli radio wifi off; fi'",
+      "read_cmd": "nmcli radio wifi | grep -q enabled && echo 1 || echo 0"
+    },
+    {
+      "type": "switch",
+      "name": "bluetooth",
+      "label": "Bluetooth",
+      "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then bluetoothctl power on; else bluetoothctl power off; fi'",
+      "read_cmd": "bluetoothctl show | grep -q 'Powered: yes' && echo 1 || echo 0"
+    },
+    {
+      "type": "switch",
+      "name": "dnd",
+      "label": "Do Not Disturb",
+      "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then makoctl mode -a dnd; else makoctl mode -r dnd; fi'"
+    },
+    {
+      "type": "switch",
+      "name": "idle",
+      "label": "Screen Lock",
+      "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then pidof swayidle || swayidle &; else pkill swayidle; fi'",
+      "read_cmd": "pidof swayidle > /dev/null && echo 1 || echo 0"
+    },
+    {
+      "type": "button",
+      "name": "lock",
+      "label": "Lock Now",
+      "cmd": "swaylock"
+    },
+    {
+      "type": "button",
+      "name": "power_menu",
+      "label": "Power Menu",
+      "cmd": "wlogout"
+    }
+  ]
+}
