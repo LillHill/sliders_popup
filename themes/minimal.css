@@ -1,0 +1,22 @@
+/* Minimal / GTK-default override — near-stock look with subtle tweaks */
+
+#sliders_popup {
+    padding: 6px;
+}
+
+.slider-label, .switch-label {
+    font-size: 12px;
+}
+
+scale trough {
+    min-height: 6px;
+}
+
+scale slider {
+    min-width: 14px;
+    min-height: 14px;
+}
+
+.popup-button {
+    padding: 4px 12px;
+}

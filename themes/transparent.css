@@ -1,0 +1,78 @@
+/* Semi-transparent glassmorphism theme */
+
+#sliders_popup {
+    background-color: rgba(20, 20, 30, 0.85);
+    border-radius: 16px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.slider-row {
+    margin: 4px 0;
+}
+
+.slider-label, .switch-label {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+scale trough {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    min-height: 8px;
+}
+
+scale highlight {
+    background-color: rgba(130, 170, 255, 0.8);
+    border-radius: 8px;
+    min-height: 8px;
+}
+
+scale slider {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+    margin: -4px;
+}
+
+scale value {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11px;
+}
+
+.popup-button {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 6px 16px;
+    font-size: 13px;
+}
+
+.popup-button:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.popup-button:active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+switch {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    min-width: 40px;
+    min-height: 20px;
+}
+
+switch:checked {
+    background-color: rgba(130, 170, 255, 0.8);
+}
+
+switch slider {
+    background-color: white;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+}

@@ -1,0 +1,83 @@
+/* Catppuccin Mocha theme */
+
+#sliders_popup {
+    background-color: #1e1e2e;
+    border-radius: 12px;
+    padding: 8px;
+}
+
+.slider-row {
+    margin: 4px 0;
+}
+
+.slider-label, .switch-label {
+    color: #cdd6f4;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+scale trough {
+    background-color: #313244;
+    border-radius: 6px;
+    min-height: 8px;
+}
+
+scale highlight {
+    background-color: #89b4fa;
+    border-radius: 6px;
+    min-height: 8px;
+}
+
+scale slider {
+    background-color: #cdd6f4;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+    margin: -4px;
+}
+
+scale value {
+    color: #a6adc8;
+    font-size: 11px;
+}
+
+.popup-button {
+    background: #313244;
+    color: #cdd6f4;
+    border: 1px solid #45475a;
+    border-radius: 8px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.popup-button:hover {
+    background: #45475a;
+}
+
+.popup-button:active {
+    background: #585b70;
+}
+
+switch {
+    background-color: #313244;
+    border-radius: 12px;
+    min-width: 40px;
+    min-height: 20px;
+}
+
+switch:checked {
+    background-color: #89b4fa;
+}
+
+switch slider {
+    background-color: #cdd6f4;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+.container {
+    margin: 2px 0;
+}

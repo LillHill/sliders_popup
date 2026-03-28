@@ -1,0 +1,53 @@
+{
+  "width": 320,
+  "anchor": "bottom right",
+  "margin": { "bottom": 10, "right": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "themes/rose_pine.css",
+  "orientation": "vertical",
+  "spacing": 6,
+  "children": [
+    {
+      "type": "slider",
+      "name": "mpd_vol",
+      "label": "MPD Volume",
+      "cmd": "mpc volume ${VAL}",
+      "read_cmd": "mpc volume | grep -oP '\\d+'",
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    {
+      "type": "box",
+      "orientation": "horizontal",
+      "spacing": 6,
+      "children": [
+        { "type": "button", "name": "prev", "label": "Prev", "cmd": "mpc prev" },
+        { "type": "button", "name": "toggle", "label": "Play/Pause", "cmd": "mpc toggle" },
+        { "type": "button", "name": "next", "label": "Next", "cmd": "mpc next" }
+      ]
+    },
+    {
+      "type": "box",
+      "orientation": "horizontal",
+      "spacing": 6,
+      "children": [
+        {
+          "type": "switch",
+          "name": "repeat",
+          "label": "Repeat",
+          "cmd": "mpc repeat",
+          "read_cmd": "mpc status | grep -q 'repeat: on' && echo 1 || echo 0"
+        },
+        {
+          "type": "switch",
+          "name": "shuffle",
+          "label": "Shuffle",
+          "cmd": "mpc random",
+          "read_cmd": "mpc status | grep -q 'random: on' && echo 1 || echo 0"
+        }
+      ]
+    }
+  ]
+}

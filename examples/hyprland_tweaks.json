@@ -4,7 +4,7 @@
   "margin": { "top": 10, "right": 10 },
   "layer": "overlay",
   "close_on_focus_loss": true,
-  "css": "style.css",
+  "css": "themes/catppuccin.css",
   "orientation": "vertical",
   "sliders": [
     {

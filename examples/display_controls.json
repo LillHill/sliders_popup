@@ -1,0 +1,43 @@
+{
+  "width": 380,
+  "anchor": "top right",
+  "margin": { "top": 10, "right": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "themes/nord.css",
+  "orientation": "vertical",
+  "children": [
+    {
+      "type": "slider",
+      "name": "brightness",
+      "label": "Brightness",
+      "cmd": "brightnessctl set ${VAL}%",
+      "read_cmd": "brightnessctl -m | awk -F, '{print int($4)}'",
+      "min": 1,
+      "max": 100,
+      "step": 1
+    },
+    {
+      "type": "slider",
+      "name": "temperature",
+      "label": "Color Temperature",
+      "cmd": "busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q ${VAL}",
+      "min": 2500,
+      "max": 6500,
+      "step": 100,
+      "value": 6500
+    },
+    {
+      "type": "switch",
+      "name": "nightlight",
+      "label": "Night Light (3500K)",
+      "cmd": "sh -c 'if [ \"$VAL\" = 1 ]; then busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 3500; else busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay Temperature q 6500; fi'"
+    },
+    {
+      "type": "button",
+      "name": "dpms_off",
+      "label": "Screen Off",
+      "cmd": "sleep 0.5 && hyprctl dispatch dpms off"
+    }
+  ]
+}

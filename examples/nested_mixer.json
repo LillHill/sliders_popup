@@ -1,0 +1,99 @@
+{
+  "width": 320,
+  "height": 420,
+  "anchor": "right",
+  "margin": { "right": 10 },
+  "layer": "overlay",
+  "close_on_focus_loss": true,
+  "css": "themes/rose_pine.css",
+  "orientation": "vertical",
+  "children": [
+    {
+      "type": "box",
+      "orientation": "horizontal",
+      "spacing": 12,
+      "homogeneous": true,
+      "children": [
+        {
+          "type": "box",
+          "orientation": "vertical",
+          "name": "vol_col",
+          "children": [
+            {
+              "type": "slider",
+              "name": "vol",
+              "label": "Vol",
+              "orientation": "vertical",
+              "length": 250,
+              "cmd": "wpctl set-volume @DEFAULT_AUDIO_SINK@ ${VAL}%",
+              "read_cmd": "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf \"%.0f\", $2 * 100}'",
+              "min": 0,
+              "max": 100,
+              "step": 1,
+              "value_pos": "bottom"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "orientation": "vertical",
+          "name": "mic_col",
+          "children": [
+            {
+              "type": "slider",
+              "name": "mic",
+              "label": "Mic",
+              "orientation": "vertical",
+              "length": 250,
+              "cmd": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ ${VAL}%",
+              "read_cmd": "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{printf \"%.0f\", $2 * 100}'",
+              "min": 0,
+              "max": 100,
+              "step": 1,
+              "value_pos": "bottom"
+            }
+          ]
+        },
+        {
+          "type": "box",
+          "orientation": "vertical",
+          "name": "bri_col",
+          "children": [
+            {
+              "type": "slider",
+              "name": "bri",
+              "label": "Bri",
+              "orientation": "vertical",
+              "length": 250,
+              "cmd": "brightnessctl set ${VAL}%",
+              "read_cmd": "brightnessctl -m | awk -F, '{print int($4)}'",
+              "min": 1,
+              "max": 100,
+              "step": 1,
+              "value_pos": "bottom"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "box",
+      "orientation": "horizontal",
+      "spacing": 8,
+      "children": [
+        {
+          "type": "button",
+          "name": "mute_all",
+          "label": "Mute All",
+          "cmd": "wpctl set-mute @DEFAULT_AUDIO_SINK@ 1 && wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 1"
+        },
+        {
+          "type": "button",
+          "name": "unmute_all",
+          "label": "Unmute All",
+          "cmd": "wpctl set-mute @DEFAULT_AUDIO_SINK@ 0 && wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 0"
+        }
+      ]
+    }
+  ]
+}
