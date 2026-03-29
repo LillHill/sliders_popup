@@ -183,12 +183,10 @@ fn read_value(cmd: &str) -> Option<String> {
         .output()
         .ok()
         .and_then(|o| {
-            if o.status.success() {
-                let s = String::from_utf8_lossy(&o.stdout).trim().to_string();
-                if s.is_empty() { None } else { Some(s) }
-            } else {
-                None
-            }
+            // Use stdout if it has content, regardless of exit code.
+            // Tools like `expr` exit 1 when result is 0, grep -q exits 1 on no match, etc.
+            let s = String::from_utf8_lossy(&o.stdout).trim().to_string();
+            if s.is_empty() { None } else { Some(s) }
         })
 }
 
